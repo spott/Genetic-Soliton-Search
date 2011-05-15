@@ -1,2 +1,2 @@
 bin_PROGRAMS = solisearch
-solisearch_SOURCES = main.c
+solisearch_SOURCES = main.c curve.c propagate.c settings.h

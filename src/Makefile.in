@@ -50,10 +50,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_solisearch_OBJECTS = main.$(OBJEXT) curve.$(OBJEXT) \
-	propagate.$(OBJEXT)
+am_solisearch_OBJECTS = solisearch-main.$(OBJEXT) \
+	solisearch-curve.$(OBJEXT) solisearch-propagate.$(OBJEXT)
 solisearch_OBJECTS = $(am_solisearch_OBJECTS)
 solisearch_LDADD = $(LDADD)
+solisearch_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(solisearch_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -183,6 +186,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 solisearch_SOURCES = main.c curve.c propagate.c settings.h
+solisearch_CFLAGS = -O2
 all: all-am
 
 .SUFFIXES:
@@ -262,7 +266,7 @@ clean-binPROGRAMS:
 	rm -f $$list
 solisearch$(EXEEXT): $(solisearch_OBJECTS) $(solisearch_DEPENDENCIES) 
 	@rm -f solisearch$(EXEEXT)
-	$(LINK) $(solisearch_OBJECTS) $(solisearch_LDADD) $(LIBS)
+	$(solisearch_LINK) $(solisearch_OBJECTS) $(solisearch_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -270,9 +274,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/curve.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/propagate.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/solisearch-curve.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/solisearch-main.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/solisearch-propagate.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -294,6 +298,48 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+solisearch-main.o: main.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-main.o -MD -MP -MF $(DEPDIR)/solisearch-main.Tpo -c -o solisearch-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-main.Tpo $(DEPDIR)/solisearch-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='main.c' object='solisearch-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
+
+solisearch-main.obj: main.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-main.obj -MD -MP -MF $(DEPDIR)/solisearch-main.Tpo -c -o solisearch-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-main.Tpo $(DEPDIR)/solisearch-main.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='main.c' object='solisearch-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+
+solisearch-curve.o: curve.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-curve.o -MD -MP -MF $(DEPDIR)/solisearch-curve.Tpo -c -o solisearch-curve.o `test -f 'curve.c' || echo '$(srcdir)/'`curve.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-curve.Tpo $(DEPDIR)/solisearch-curve.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='curve.c' object='solisearch-curve.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-curve.o `test -f 'curve.c' || echo '$(srcdir)/'`curve.c
+
+solisearch-curve.obj: curve.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-curve.obj -MD -MP -MF $(DEPDIR)/solisearch-curve.Tpo -c -o solisearch-curve.obj `if test -f 'curve.c'; then $(CYGPATH_W) 'curve.c'; else $(CYGPATH_W) '$(srcdir)/curve.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-curve.Tpo $(DEPDIR)/solisearch-curve.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='curve.c' object='solisearch-curve.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-curve.obj `if test -f 'curve.c'; then $(CYGPATH_W) 'curve.c'; else $(CYGPATH_W) '$(srcdir)/curve.c'; fi`
+
+solisearch-propagate.o: propagate.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-propagate.o -MD -MP -MF $(DEPDIR)/solisearch-propagate.Tpo -c -o solisearch-propagate.o `test -f 'propagate.c' || echo '$(srcdir)/'`propagate.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-propagate.Tpo $(DEPDIR)/solisearch-propagate.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='propagate.c' object='solisearch-propagate.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-propagate.o `test -f 'propagate.c' || echo '$(srcdir)/'`propagate.c
+
+solisearch-propagate.obj: propagate.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -MT solisearch-propagate.obj -MD -MP -MF $(DEPDIR)/solisearch-propagate.Tpo -c -o solisearch-propagate.obj `if test -f 'propagate.c'; then $(CYGPATH_W) 'propagate.c'; else $(CYGPATH_W) '$(srcdir)/propagate.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/solisearch-propagate.Tpo $(DEPDIR)/solisearch-propagate.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='propagate.c' object='solisearch-propagate.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(solisearch_CFLAGS) $(CFLAGS) -c -o solisearch-propagate.obj `if test -f 'propagate.c'; then $(CYGPATH_W) 'propagate.c'; else $(CYGPATH_W) '$(srcdir)/propagate.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

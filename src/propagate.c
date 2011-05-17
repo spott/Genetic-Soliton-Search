@@ -11,7 +11,7 @@
 #include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_fft_complex.h>
 
-gsl_vector_complex * propagate_curve(double dx, double dt, gsl_vector * curve_x, gsl_vector_complex * curve_y)
+void propagate_curve(double dx, double dt, gsl_vector * curve_x, gsl_vector_complex * curve_y)
 {
     int i;
     int debug = 0;
@@ -22,6 +22,7 @@ gsl_vector_complex * propagate_curve(double dx, double dt, gsl_vector * curve_x,
     gsl_fft_complex_workspace * workspace = gsl_fft_complex_workspace_alloc (curve_y->size);
 
     gsl_fft_complex_forward (fft_able->data, 1, curve_y->size, wavetable, workspace);
+    
     // Print out fft coeffs
     //for (i = 1015; i < curve_y->size; i++)
     //{
@@ -35,6 +36,5 @@ gsl_vector_complex * propagate_curve(double dx, double dt, gsl_vector * curve_x,
 
     gsl_fft_complex_wavetable_free (wavetable);
     gsl_fft_complex_workspace_free (workspace);
-    return();
 }
 

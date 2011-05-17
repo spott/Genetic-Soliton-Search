@@ -9,58 +9,63 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_complex_math.h>
 
+#include "curve.h"
+#include "propagate.h"
+
 #define MAX_GENE_SIZE 100
-#define CURVE_SIZE 1000
+#define CURVE_SIZE 1024
 
 
 int main (void)
 {
-    double width = 1.0;
+    double width = 2*M_PI;
     double dx    = width/CURVE_SIZE;
+    double dt    = pow(10,-3);
     int i;
-    unsigned int gene_size = 0;
-    gsl_vector         * gene_x  = gsl_vector_alloc (MAX_GENE_SIZE);
-    gsl_vector_complex * gene_y  = gsl_vector_complex_alloc (MAX_GENE_SIZE);
+    unsigned int chromosome_size = 0;
+    gsl_vector         * chromosome_x  = gsl_vector_alloc (MAX_GENE_SIZE);
+    gsl_vector_complex * chromosome_y  = gsl_vector_complex_alloc (MAX_GENE_SIZE);
     gsl_vector         * curve_x = gsl_vector_alloc (CURVE_SIZE);
     gsl_vector_complex * curve_y = gsl_vector_complex_alloc (CURVE_SIZE);
-    gsl_vector_set_zero (gene_x);
-    gsl_vector_complex_set_zero (gene_y);
+    gsl_vector_set_zero (chromosome_x);
+    gsl_vector_complex_set_zero (chromosome_y);
     gsl_vector_set_all (curve_x,1.0);
     gsl_vector_complex_set_zero (curve_y);
 
     //Fill curve_x with descrete steps
     for(i=0;i<curve_x->size;i++)
-        gsl_vector_set (curve_x,i,(double)i*dx);
+        gsl_vector_set (curve_x,i,(-width/2)+(double)i*dx);
 
     // Set Pinning on LHS
-    int gene_index = -1;
-    gene_index++;
-    gsl_vector_set (gene_x, gene_index,0);
-    gsl_vector_complex_set (gene_y, gene_index,gsl_complex_rect(0.0,0.0));
-    gene_index++;
-    gsl_vector_set (gene_x, gene_index,dx);
-    gsl_vector_complex_set (gene_y, gene_index,gsl_complex_rect(0.0,0.0));
+    int chromosome_index = -1;
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,0);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,dx);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     // Set points
-    gene_index++;
-    gsl_vector_set (gene_x, gene_index,0.5);
-    gsl_vector_complex_set (gene_y, gene_index,gsl_complex_rect(1.0,0.7));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,0.5);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(1.0,0.7));
     // Set Pinning on LHS
-    gene_index++;
-    gsl_vector_set (gene_x, gene_index,width-dx);
-    gsl_vector_complex_set (gene_y, gene_index,gsl_complex_rect(0.0,0.0));
-    gene_index++;
-    gsl_vector_set (gene_x, gene_index,width);
-    gsl_vector_complex_set (gene_y, gene_index,gsl_complex_rect(0.0,0.0));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,width-dx);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,width);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     
-    //printf("gene_index=%i\n",gene_index);
-    //for(i=0;i<gene_index;i++)
-    //    printf("%g %g+%gi\n",gsl_vector_get (gene_x,i), GSL_REAL(gsl_vector_complex_get(gene_y,i)), GSL_IMAG(gsl_vector_complex_get(gene_y,i)));
+    //printf("chromosome_index=%i\n",chromosome_index);
+    //for(i=0;i<chromosome_index;i++)
+    //    printf("%g %g+%gi\n",gsl_vector_get (chromosome_x,i), GSL_REAL(gsl_vector_complex_get(chromosome_y,i)), GSL_IMAG(gsl_vector_complex_get(chromosome_y,i)));
     
 
     // Convert to curve
-    gene2curve(dx,gene_index+1,gene_x,gene_y,curve_x,curve_y);
+    chromosome2curve(dx,chromosome_index+1,chromosome_x,chromosome_y,curve_x,curve_y);
 
-    print_curve(curve_x,curve_y);
+    //print_curve(curve_x,curve_y);
+    propagate_curve(dx,dt,curve_x,curve_y);
 
     return 0;
 }

@@ -186,7 +186,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 solisearch_SOURCES = main.c curve.c curve.h propagate.c propagate.h settings.h
-solisearch_CFLAGS = -O2
+solisearch_CFLAGS = -ggdb -pg
 all: all-am
 
 .SUFFIXES:

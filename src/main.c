@@ -13,7 +13,7 @@
 #include "propagate.h"
 
 #define MAX_GENE_SIZE 100
-#define CURVE_SIZE 1024
+#define CURVE_SIZE 2048
 
 
 int main (void)
@@ -36,24 +36,32 @@ int main (void)
     for(i=0;i<curve_x->size;i++)
         gsl_vector_set (curve_x,i,(-width/2)+(double)i*dx);
 
-    // Set Pinning on LHS
+    // Set Pinning on LHS.
+    // We only plot points x \in [-pi/4,pi/4].
+    // This way we can propagate the cure.
     int chromosome_index = -1;
     chromosome_index++;
-    gsl_vector_set (chromosome_x, chromosome_index,0);
+    gsl_vector_set (chromosome_x, chromosome_index,-M_PI_4);
     gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     chromosome_index++;
-    gsl_vector_set (chromosome_x, chromosome_index,dx);
+    gsl_vector_set (chromosome_x, chromosome_index,-M_PI_4+dx);
     gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     // Set points
     chromosome_index++;
-    gsl_vector_set (chromosome_x, chromosome_index,0.5);
+    gsl_vector_set (chromosome_x, chromosome_index,-M_PI_4/2);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(-1.0,0));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,0.0);
     gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(1.0,0.7));
+    chromosome_index++;
+    gsl_vector_set (chromosome_x, chromosome_index,M_PI_4/2);
+    gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(-1.0,0));
     // Set Pinning on LHS
     chromosome_index++;
-    gsl_vector_set (chromosome_x, chromosome_index,width-dx);
+    gsl_vector_set (chromosome_x, chromosome_index,M_PI_4-dx);
     gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     chromosome_index++;
-    gsl_vector_set (chromosome_x, chromosome_index,width);
+    gsl_vector_set (chromosome_x, chromosome_index,M_PI_4);
     gsl_vector_complex_set (chromosome_y, chromosome_index,gsl_complex_rect(0.0,0.0));
     
     //printf("chromosome_index=%i\n",chromosome_index);
@@ -64,8 +72,17 @@ int main (void)
     // Convert to curve
     chromosome2curve(dx,chromosome_index+1,chromosome_x,chromosome_y,curve_x,curve_y);
 
-    //print_curve(curve_x,curve_y);
-    propagate_curve(dx,dt,curve_x,curve_y);
+    print_curve(curve_x,curve_y);
+
+    //propagate_curve(dx,dt,curve_x,curve_y);
+
+
+    //Clear out used memory.
+    gsl_vector_free(chromosome_x);
+    gsl_vector_complex_free(chromosome_y);
+    gsl_vector_free(curve_x);
+    gsl_vector_complex_free(curve_y);
+    
 
     return 0;
 }

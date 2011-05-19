@@ -53,12 +53,18 @@ int chromosome2curve ( double dx,
     gsl_spline_init (spline_imag, chromosome_x->data, chromosome_y_temp->data , chromosome_size);
     
     printf("#chromosome2curve: Writing Spline data to curve\n");
-    for(i=0; i < curve_x->size; i++)
+
+    int center     = round(curve_x->size/2);
+    int lhs        = round(center-0.5/dx);
+    int rhs        = round(center+0.5/dx);
+    double width_2 = dx*curve_x->size/2.0;
+
+    for(i=lhs; i <= rhs; i++)
     {
         gsl_vector_complex_set (curve_y,i,
             gsl_complex_rect (
-                gsl_spline_eval (spline_real,(double)i*dx,acc),
-                gsl_spline_eval (spline_imag,(double)i*dx,acc)
+                gsl_spline_eval (spline_real,(double)i*dx-width_2,acc),
+                gsl_spline_eval (spline_imag,(double)i*dx-width_2,acc)
             )
         );
     }
